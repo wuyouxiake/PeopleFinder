@@ -52,7 +52,7 @@ public class FindPeople extends HttpServlet {
         PreparedStatement preStatement = conn.prepareStatement(sql);
 		ResultSet result = preStatement.executeQuery();
 				if(result.next()){
-					while(result.next()){
+					do{
 						fullList+=("<tr><td>"+
 								result.getString("customerid")+"</td><td>"+
 								result.getString("fullname")+"</td><td>"+
@@ -68,7 +68,7 @@ public class FindPeople extends HttpServlet {
 								result.getString("companyname")+
 								"</td></tr>");
 						//System.out.println(fullList);
-					}
+					}while(result.next());
 					response.setContentType("text/html");
 					request.setAttribute("fullList",fullList);
 					request.setAttribute("lastname",lastname);

@@ -21,6 +21,7 @@ import java.util.Properties;
 public class FindPeople extends HttpServlet {
 	String lastname;
 	String fullList;
+	String content;
 	public void init() throws ServletException {
 		// Do required initialization
 		
@@ -50,40 +51,41 @@ public class FindPeople extends HttpServlet {
         
         PreparedStatement preStatement = conn.prepareStatement(sql);
 		ResultSet result = preStatement.executeQuery();
-			
-				while(result.next()){
-					fullList+=("<tr><td>"+
-							result.getString("customerid")+"</td><td>"+
-							result.getString("fullname")+"</td><td>"+
-							result.getString("title")+"</td><td>"+
-							result.getString("firstname")+"</td><td>"+
-							result.getString("lastname")+"</td><td>"+
-							result.getString("streetaddress")+"</td><td>"+
-							result.getString("state")+"</td><td>"+
-							result.getString("city")+"</td><td>"+
-							result.getString("zipcode")+"</td><td>"+
-							result.getString("emailaddress")+"</td><td>"+
-							result.getString("position")+"</td><td>"+
-							result.getString("companyname")+
-							"</td></tr>");
-					//System.out.println(fullList);
+				if(result.next()){
+					while(result.next()){
+						fullList+=("<tr><td>"+
+								result.getString("customerid")+"</td><td>"+
+								result.getString("fullname")+"</td><td>"+
+								result.getString("title")+"</td><td>"+
+								result.getString("firstname")+"</td><td>"+
+								result.getString("lastname")+"</td><td>"+
+								result.getString("streetaddress")+"</td><td>"+
+								result.getString("state")+"</td><td>"+
+								result.getString("city")+"</td><td>"+
+								result.getString("zipcode")+"</td><td>"+
+								result.getString("emailaddress")+"</td><td>"+
+								result.getString("position")+"</td><td>"+
+								result.getString("companyname")+
+								"</td></tr>");
+						//System.out.println(fullList);
+					}
+					response.setContentType("text/html");
+					request.setAttribute("fullList",fullList);
+					request.setAttribute("lastname",lastname);
+					getServletContext().getRequestDispatcher("/list.jsp").forward(request, response);
+				}else{
+					content="Not found!";
+					response.setContentType("text/html");
+					request.setAttribute("content",content);
+					request.setAttribute("lastname",lastname);
+					getServletContext().getRequestDispatcher("/NotFound.jsp").forward(request, response);
 				}
 				conn.close();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
-		// Set response content type
-		response.setContentType("text/html");
 
-		// Actual logic goes here.
-		//PrintWriter out = response.getWriter();
-		//message = "Hello";
-		//out.println("&lt;h1&gt;" + message + "&lt;/h1&gt;");
-		request.setAttribute("fullList",fullList);
-		request.setAttribute("lastname",lastname);
-		
-		getServletContext().getRequestDispatcher("/list.jsp").forward(request, response);
 		fullList="";
 	}
 

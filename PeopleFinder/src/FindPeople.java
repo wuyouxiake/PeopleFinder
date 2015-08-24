@@ -48,7 +48,7 @@ public class FindPeople extends HttpServlet {
         		+ "left join excelcompany on excelcustomer.COMPANY=excelcompany.COMPANYID) "
         		+ "where lastname like \'"+lastname+"%\' or companyname like \'"+lastname+"%\'";
         		
-        
+        System.out.println(sql);
         PreparedStatement preStatement = conn.prepareStatement(sql);
 		ResultSet result = preStatement.executeQuery();
 				if(result.next()){
